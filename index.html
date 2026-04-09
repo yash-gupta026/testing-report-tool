@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA Testing Dashboard Pro</title>
+    <title>Professional QA Testing Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
         .container { max-width: 950px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-weight: 600; }
         
         .header-inputs { display: flex; gap: 20px; margin-bottom: 25px; background: #ebf2f7; padding: 15px; border-radius: 8px; }
         .input-group { display: flex; flex-direction: column; flex: 1; }
-        .input-group label { font-weight: bold; margin-bottom: 5px; color: #34495e; }
+        .input-group label { font-weight: bold; margin-bottom: 5px; color: #34495e; font-size: 14px; }
         .header-inputs input { padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #dcdde1; padding: 12px; text-align: left; }
-        th { background-color: #3498db; color: white; font-weight: 600; }
+        th { background-color: #3498db; color: white; font-weight: 600; text-transform: uppercase; font-size: 13px; }
         
         .status-col { text-align: center; width: 80px; }
         .checkbox-custom { width: 20px; height: 20px; cursor: pointer; }
-        .review-input, .param-name-input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .review-input, .param-name-input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
         
         .footer-actions { display: flex; justify-content: space-between; margin-top: 25px; align-items: center; }
         .left-btns { display: flex; gap: 10px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 14px; }
         .add-btn { background-color: #3498db; color: white; }
         .add-btn:hover { background-color: #2980b9; }
         .download-btn { background-color: #27ae60; color: white; }
@@ -38,15 +38,15 @@
 <body>
 
 <div class="container">
-    <h1>Testing Report Generator</h1>
+    <h1>Quality Assurance Report Tool</h1>
     
     <div class="header-inputs">
         <div class="input-group">
             <label>Reviewed By (Tester Name):</label>
-            <input type="text" id="testerName" placeholder="Apna naam likho...">
+            <input type="text" id="testerName" placeholder="Enter your full name">
         </div>
         <div class="input-group">
-            <label>Testing Date:</label>
+            <label>Inspection Date:</label>
             <input type="date" id="testDate">
         </div>
     </div>
@@ -55,8 +55,8 @@
         <thead>
             <tr>
                 <th>Testing Parameter</th>
-                <th class="status-col">Pass?</th>
-                <th>Review / Observation</th>
+                <th class="status-col">Status</th>
+                <th>Remarks / Observations</th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -65,10 +65,10 @@
 
     <div class="footer-actions">
         <div class="left-btns">
-            <button class="btn add-btn" onclick="addNewRow()">+ Add More Suggestions</button>
-            <button class="btn clear-btn" onclick="window.location.reload()">Clear All</button>
+            <button class="btn add-btn" onclick="addNewRow()">+ Add Parameter</button>
+            <button class="btn clear-btn" onclick="window.location.reload()">Reset All</button>
         </div>
-        <button class="btn download-btn" onclick="generatePDF()">Download PDF Report</button>
+        <button class="btn download-btn" onclick="generatePDF()">Export PDF Report</button>
     </div>
 </div>
 
@@ -76,14 +76,14 @@
     const initialParameters = [
         "Ability to Search By Booking ID",
         "Show Payout difference which Passenger needs to pay",
-        "Vehicle number filter isn’t working fix it",
+        "Vehicle number filter functionality",
         "Assign Vehicle and Driver at create booking",
         "Suggestion removal on selection",
         "Add payable fare with hover box",
-        "Generate receipt is not considering the driver expenses",
+        "Generate receipt (Driver expenses check)",
         "Show Vehicle Number and Driver Name in the action card",
         "Show Vehicle Number and Driver details in the action card",
-        "Ability to add/edit Return Date and Time - Option",
+        "Ability to add/edit Return Date and Time",
         "Add Toll expenses by Driver"
     ];
 
@@ -91,21 +91,20 @@
     const dateInput = document.getElementById('testDate');
     dateInput.valueAsDate = new Date();
 
-    // Pehle se fix parameters load karna
     initialParameters.forEach(param => {
         addTableRow(param, false);
     });
 
     function addNewRow() {
-        addTableRow("", true); // Khali row add karna manually
+        addTableRow("", true);
     }
 
     function addTableRow(paramText, isEditable) {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${isEditable ? `<input type="text" class="param-name-input" placeholder="Enter new parameter name...">` : paramText}</td>
+            <td>${isEditable ? `<input type="text" class="param-name-input" placeholder="Enter new parameter...">` : paramText}</td>
             <td class="status-col"><input type="checkbox" class="checkbox-custom"></td>
-            <td><input type="text" class="review-input" placeholder="Remarks..."></td>
+            <td><input type="text" class="review-input" placeholder="Enter observation..."></td>
         `;
         tableBody.appendChild(row);
     }
@@ -114,15 +113,19 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        const tester = document.getElementById('testerName').value || "Tester";
+        const tester = document.getElementById('testerName').value || "QA Tester";
         const tDate = document.getElementById('testDate').value;
 
-        doc.setFontSize(20);
-        doc.text("Testing Execution Report", 14, 20);
-        doc.setFontSize(11);
-        doc.text(`Reviewed By: ${tester}`, 14, 30);
-        doc.text(`Date: ${tDate}`, 14, 37);
-        doc.line(14, 42, 196, 42);
+        // Header Style
+        doc.setFontSize(22);
+        doc.setTextColor(44, 62, 80);
+        doc.text("QA Execution Report", 14, 22);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Tester: ${tester}`, 14, 32);
+        doc.text(`Date: ${tDate}`, 14, 38);
+        doc.line(14, 43, 196, 43);
 
         const rows = [];
         const trs = document.querySelectorAll("#tableBody tr");
@@ -131,24 +134,27 @@
             let paramName;
             const inputField = tr.cells[0].querySelector('.param-name-input');
             if (inputField) {
-                paramName = inputField.value || "Custom Parameter";
+                paramName = inputField.value || "Custom Test Case";
             } else {
                 paramName = tr.cells[0].innerText;
             }
 
             const isPass = tr.querySelector('.checkbox-custom').checked;
             const status = isPass ? "PASS" : "FAIL";
-            const review = tr.querySelector('.review-input').value || (isPass ? "Working fine" : "Issue found");
+            const review = tr.querySelector('.review-input').value || (isPass ? "Feature working as expected" : "Issue identified");
             rows.push([paramName, status, review]);
         });
 
         doc.autoTable({
-            head: [['Testing Parameter', 'Status', 'Review/Remarks']],
+            head: [['Testing Parameter', 'Status', 'Remarks']],
             body: rows,
-            startY: 48,
+            startY: 50,
             theme: 'grid',
-            headStyles: { fillColor: [52, 152, 219] },
-            columnStyles: { 1: { halign: 'center' } },
+            headStyles: { fillColor: [52, 152, 219], fontSize: 11 },
+            columnStyles: { 
+                1: { halign: 'center', fontStyle: 'bold' },
+                2: { fontStyle: 'italic' }
+            },
             didDrawCell: (data) => {
                 if (data.section === 'body' && data.column.index === 1) {
                     if (data.cell.raw === 'FAIL') doc.setTextColor(231, 76, 60);
@@ -157,7 +163,7 @@
             }
         });
 
-        doc.save(`Report_${tester}_${tDate}.pdf`);
+        doc.save(`QA_Report_${tester}_${tDate}.pdf`);
     }
 </script>
 
